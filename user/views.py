@@ -27,7 +27,7 @@ def sign_up_view(request):
             if username == '' or password == '' or first_name == '' :
                 return render(request, 'user/signup.html',{'error':'빈칸을 모두 채워주세요!'})
             
-            exist_user = get_user_model().objects.filter(usernama=username)
+            exist_user = get_user_model().objects.filter(username=username)
             if exist_user:
                 # 사용자가 존재하기 때문에 사용자를 저장하지 않고 회원가입 페이지를 다시 띄움
                 return render(request, 'user/signup.html', {'error': '사용자가 이미 존재합니다!'}) 
