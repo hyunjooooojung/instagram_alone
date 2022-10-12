@@ -11,40 +11,55 @@ Home
         {% for tw in tweet %}
         <div class="border feed_box">
             <div class="feed_name">
-            <div class="profile_box">
-                <img class="profile_img" src="https://scontent-ssn1-1.xx.fbcdn.net/v/t1.6435-9/s1080x2048/165180104_277246477102900_6106347261862438192_n.jpg?_nc_cat=102&ccb=1-5&_nc_sid=730e14&_nc_ohc=1sN4d8i7rn8AX-7aKYN&_nc_ht=scontent-ssn1-1.xx&oh=5049b7cd176848e330b0f5ea95f28172&oe=615A08D1">
+              <div class="profile_box">
+                  <img class="profile_img" src="https://us.123rf.com/450wm/thesomeday123/thesomeday1231712/thesomeday123171200009/91087331-%EB%82%A8%EC%84%B1%EC%9D%84%EC%9C%84%ED%95%9C-%EA%B8%B0%EB%B3%B8-%EC%95%84%EB%B0%94%ED%83%80-%ED%94%84%EB%A1%9C%ED%95%84-%EC%95%84%EC%9D%B4%EC%BD%98-%ED%9A%8C%EC%83%89-%EC%82%AC%EC%A7%84-%EC%9E%90%EB%A6%AC-%ED%91%9C%EC%8B%9C-%EC%9E%90-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%B2%A1%ED%84%B0.jpg?ver=6">
+              </div>
+              <span class="feed_name_txt"> {{ user.username }} </span>
             </div>
-            <span class="feed_name_txt"> {{ user.username }} </span>
-            </div>
-            <img class="feed_img" src="https://mblogthumb-phinf.pstatic.net/MjAxNzA2MTFfMjc1/MDAxNDk3MTcyMDgyNzEw.ID5RyHWKvsVEW2NS9EQGyRYX7vUaXr7znQeuTrRRmdIg.gK7MD7VhNJPkV4_dueiWer2y-oH7NAAmEklF-6bbYyQg.JPEG.jejubyeol/%EC%97%AC%EB%A6%84%EC%97%90_%EC%A0%9C%EC%A3%BC%EB%8F%84_%EC%82%AC%EC%A7%84%EC%B0%8D%EA%B8%B0_%EC%A2%8B%EC%9D%80%EA%B3%B3.jpg?type=w800">
-    
+            <a href="/tweet/{{ tw.id }}">
+              <img class="feed_img" src="https://us.123rf.com/450wm/thesomeday123/thesomeday1231712/thesomeday123171200009/91087331-%EB%82%A8%EC%84%B1%EC%9D%84%EC%9C%84%ED%95%9C-%EA%B8%B0%EB%B3%B8-%EC%95%84%EB%B0%94%ED%83%80-%ED%94%84%EB%A1%9C%ED%95%84-%EC%95%84%EC%9D%B4%EC%BD%98-%ED%9A%8C%EC%83%89-%EC%82%AC%EC%A7%84-%EC%9E%90%EB%A6%AC-%ED%91%9C%EC%8B%9C-%EC%9E%90-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%B2%A1%ED%84%B0.jpg?ver=6">
+            </a>
             <div class="feed_icon">
-            <div>
-                <span class="material-icons-outlined">
-                favorite_border
-                </span>
-                <span class="material-icons-outlined">
-                mode_comment
-                </span>
-                <span class="material-icons-outlined">
-                send
-                </span>
+              <div>
+                  <span class="material-icons-outlined">
+                  favorite_border
+                  </span>
+                  <span class="material-icons-outlined">
+                  mode_comment
+                  </span>
+                  <span class="material-icons-outlined">
+                  send
+                  </span>
+              </div>
+              <div>
+                  <span class="material-icons-outlined">
+                  turned_in_not
+                  </span>
+              </div>
             </div>
-            <div>
-                <span class="material-icons-outlined">
-                turned_in_not
-                </span>
-            </div>
-            </div>
+
             <div class="feed_like">
-            <p class="feed_txt"> <b>좋아요 10개</b></p>
+              <p class="feed_txt"> <b>좋아요 10개</b></p>
             </div>
             <div class="feed_content">
-            <p class="feed_txt"> <b> {{ tw.author }}</b> {{ tw.content }}</p>
+              <p class="feed_txt"> <b> {{ tw.author }}</b> {{ tw.content }}</p>
+              <div style="text-align: left">
+                <span style="font-size: small">{{ tw.updated_at|timesince }} 전</span>
+            </div>
             </div>
             <div class="feed_reply">
-            <span class="feed_txt"> <b> mychew </b> 제주도 가고 싶어요 ㅠㅠ</span>
-            <span class="feed_txt"> <b> cho </b> 제주도  ㄱ ㄱ </span>
+              <div class="feed_reply">
+                  {% for cm in tw.tweetcomment_set.all %}
+                  <span class="feed_txt"> <b> {{ cm.author }} </b> {{ cm.comment }}</span>
+                  {% endfor %}
+              </div>
+              <div class="blank"></div>               
+              <form class="input-group mb-3" action="/tweet/home/comment/{{ tw.id }}" method="post">
+                  {% csrf_token %}
+                  <input type="text" class="form-control" id='comment' name='comment'
+                      placeholder="댓글을 남겨주세요" />
+                  <button class="btn btn-outline-secondary" type="submit">작성</button>
+              </form>
             </div>
         </div>
         {% endfor %}
@@ -57,7 +72,7 @@ Home
         <div style="display: flex; align-items: center; ">
           <div class="big_profile_box">
             <img class="profile_img"
-                 src="https://scontent-ssn1-1.xx.fbcdn.net/v/t1.6435-9/s1080x2048/165180104_277246477102900_6106347261862438192_n.jpg?_nc_cat=102&ccb=1-5&_nc_sid=730e14&_nc_ohc=1sN4d8i7rn8AX-7aKYN&_nc_ht=scontent-ssn1-1.xx&oh=5049b7cd176848e330b0f5ea95f28172&oe=615A08D1">
+                 src="https://us.123rf.com/450wm/thesomeday123/thesomeday1231712/thesomeday123171200009/91087331-%EB%82%A8%EC%84%B1%EC%9D%84%EC%9C%84%ED%95%9C-%EA%B8%B0%EB%B3%B8-%EC%95%84%EB%B0%94%ED%83%80-%ED%94%84%EB%A1%9C%ED%95%84-%EC%95%84%EC%9D%B4%EC%BD%98-%ED%9A%8C%EC%83%89-%EC%82%AC%EC%A7%84-%EC%9E%90%EB%A6%AC-%ED%91%9C%EC%8B%9C-%EC%9E%90-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%B2%A1%ED%84%B0.jpg?ver=6">
           </div>
           <div class="name_content">
             <span class="feed_name_txt"> {{ user.username }} </span>
@@ -70,6 +85,7 @@ Home
         <span style="color: gray"> 회원님을 위한 추천</span>
         <span style="font-size: 12px"> 모두 보기 </span>
       </div>
+
       <div>
         <div class="feed_name" style="justify-content: space-between">
           <div class="profile_box">

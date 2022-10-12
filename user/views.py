@@ -45,7 +45,7 @@ def sign_in_view(request):
         # 저장된 사용자의 패스워드와 입력받은 패스워드 비교
         if me is not None:
             auth.login(request, me)
-            return redirect('/')
+            return redirect('/tweet')
         else:
             return render(request, 'user/signin.html', {'error':'유저이름 혹은 패스워드를 확인해주세요! '})
         
@@ -53,7 +53,7 @@ def sign_in_view(request):
         # 로그인된 사용자가 요청하는 것인지 검사
         user = request.user.is_authenticated
         if user: 
-            return redirect('/')
+            return redirect('/tweet')
         else: #로그인이 되어있지 않으면
             return render(request, 'user/signin.html')
         

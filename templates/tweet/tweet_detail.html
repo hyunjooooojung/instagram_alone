@@ -1,0 +1,335 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Post Detail
+{% endblock %}
+
+{% block content %}
+
+<style>
+    .detail_main_body {
+        
+        display: flex;
+        justify-content: center;
+        
+    }
+
+    .detail_left_body {
+        margin-top: 30px;
+        width: 500px;
+        height: 550px;
+        display: flex;
+        flex-direction: column;
+        
+    }
+
+    .detail_right_body {
+        margin-top: 30px;
+        width: 400px;
+
+        height: 550px;
+        left: 57%;
+        right: 2%;
+        flex-direction: column; 
+
+    }
+
+    .detail_feed_box_left {
+
+        width: 500px;
+        height: 520px;
+
+    }
+
+    .detail_feed_box_right {
+        width: 400px;
+        height: 520px;
+    }
+
+    .detail_feed_img {
+        
+        width: 100%;
+        height: 100%;
+        object-fit: contain; 
+    }
+    
+    .feed_detail {
+        padding-top: 1px;
+        
+    }
+
+    .detail_feed_content {
+        padding: 10px;
+        
+    }
+
+    .detail_feed_txt {
+        font-size: 14px;
+        padding: 10px;
+        word-wrap: break-word;
+    }
+
+    .detail_feed_name {
+        padding-left: 10px;
+        padding-top: 10px;
+        display: flex;
+        align-items: center;
+    }
+
+    .detail_feed_name_txt {
+        font-size: 14px;
+        padding: 0px 10px;
+        font-weight: bold;
+    }
+
+    .detail_profile_box {
+        width: 35px;
+        height: 35px;
+        border-radius: 70%;
+        overflow: hidden;
+    }
+
+    .detail_profile_img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .detail_name_content {
+        
+        width: 297px;
+        flex-direction: column;
+    }
+    .detail_time_txt {
+        font-size: 12px;
+        padding: 0px 10px;
+        font-weight: bold;
+        color: lightgray;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 190px;
+    }
+
+    .comment_list{
+        padding-left: 10px;
+        height: 230px;
+        overflow-y: auto;
+    }
+    .comment_list::-webkit-scrollbar { 
+        display: none;
+        width: 0 !important;
+    }
+
+    .comment_box {
+        
+        color: lightgray;
+        display: flex;
+        flex-direction: column;
+        margin:10px 10px 0px 0px;
+    }
+
+    .comment_profile {
+        padding-left: 5px;
+        display: flex;
+        align-items: center;
+    }
+
+    .comment_img {
+        padding: 0px 10px 15px 5px;
+    }
+
+    .comment_txt {
+        font-size: 13px;
+        margin-right: 50px;
+    }
+</style>
+
+<div class="detail_main_body">
+    <!-- 상세 왼쪽 -->
+    <div class="detail_left_body">
+        <div class="border detail_feed_box">
+            <div class="detail_feed_box_left">
+                {% if tweet.image %}
+                <img class="detail_feed_img " src="{{ tweet.image.url }}">
+                {% else %}
+                <img class="detail_feed_img " src="https://blog.kakaocdn.net/dn/cEftca/btqAgU7ckZC/2JaB2RLUkvskP7TqowbTLk/img.png">
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+
+       <!-- 상세 오른쪽 -->
+    <div class="detail_right_body">
+        <div class="border detail_feed_box_right">
+            <div class="detail_feed_name" style="justify-content: space-between">
+                <div style="display: flex; align-items: center; ">
+                    <div class="detail_profile_box">
+                        {% if tweet.author.profile %}
+                        <img class="detail_profile_img" src="{{ tweet.author.profile.url }}">
+                        {% else %}
+                        <img class="detail_profile_img"
+                            src="https://us.123rf.com/450wm/thesomeday123/thesomeday1231712/thesomeday123171200009/91087331-%EB%82%A8%EC%84%B1%EC%9D%84%EC%9C%84%ED%95%9C-%EA%B8%B0%EB%B3%B8-%EC%95%84%EB%B0%94%ED%83%80-%ED%94%84%EB%A1%9C%ED%95%84-%EC%95%84%EC%9D%B4%EC%BD%98-%ED%9A%8C%EC%83%89-%EC%82%AC%EC%A7%84-%EC%9E%90%EB%A6%AC-%ED%91%9C%EC%8B%9C-%EC%9E%90-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%B2%A1%ED%84%B0.jpg?ver=6">
+                        {% endif %}
+                    </div>
+                    <div class="detail_name_content">
+                        <span class="detail_feed_name_txt">{{ tweet.author.username }}</span>
+                    </div>
+                    {% if tweet.author == user %}
+                    <div style="float: right">
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                    
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">게시물 삭제</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        게시물을 정말 삭제하시겠습니까?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                            <button type="button" class="btn btn-light me-md-2"><a href="/tweet/delete/{{ tweet.id }}">
+                                                    <span class="material-symbols-outlined" style="color:black;">delete</span>
+                                                </a></button>
+                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                                                <span class="material-symbols-outlined">close</span></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+
+            <hr style="border: 0.5px solid silver;">
+            <div class="feed_detail">
+                <div class="detail_feed_name">
+                    <div style="display: flex; align-items: center; ">
+                        <div class="detail_profile_box">
+                            {% if tweet.author.profile %}
+                            <img class="detail_profile_img" src="{{ tweet.author.profile.url }}">
+                            {% else %}
+                            <img class="detail_profile_img"
+                                src="https://us.123rf.com/450wm/thesomeday123/thesomeday1231712/thesomeday123171200009/91087331-%EB%82%A8%EC%84%B1%EC%9D%84%EC%9C%84%ED%95%9C-%EA%B8%B0%EB%B3%B8-%EC%95%84%EB%B0%94%ED%83%80-%ED%94%84%EB%A1%9C%ED%95%84-%EC%95%84%EC%9D%B4%EC%BD%98-%ED%9A%8C%EC%83%89-%EC%82%AC%EC%A7%84-%EC%9E%90%EB%A6%AC-%ED%91%9C%EC%8B%9C-%EC%9E%90-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%B2%A1%ED%84%B0.jpg?ver=6">
+                            {% endif %}
+                        </div>
+                        <div class="detail_name_content">
+                            <span class="detail_feed_name_txt">{{ tweet.author.username }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail_feed_content">
+                    <p class="detail_feed_txt">{{ tweet.content }}</p>
+                    {% if tw.tags.all %}
+                    {% for tag in tw.tags.all %}
+                    <a style="text-decoration: none; color: inherit;" href="{% url 'tagged_object_list' tag.name %}">
+                        #{{ tag.name }}
+                    </a>
+                    {% endfor %}
+                    <a style="text-decoration: none" href="{% url 'tag_cloud' %}"></a>
+                    {% endif %}
+                    <span class="detail_time_txt">{{ tweet.created_at|timesince }}</span>
+                </div>
+                <div>
+                    
+                </div>
+            </div>
+
+            <div class="comment_list">
+                <p class="detail_feed_txt">
+                    
+                    {% for cm in comment %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="media">
+                                <div class="media-body">
+                                    <div style="display: flex; align-items: center; ">
+                                        <div class="detail_profile_box">
+                                            {% if cm.author.profile %}
+                                            <img class="detail_profile_img" src="{{ cm.author.profile.url }}">
+                                            {% else %}
+                                            <img class="detail_profile_img"
+                                                src="https://us.123rf.com/450wm/thesomeday123/thesomeday1231712/thesomeday123171200009/91087331-%EB%82%A8%EC%84%B1%EC%9D%84%EC%9C%84%ED%95%9C-%EA%B8%B0%EB%B3%B8-%EC%95%84%EB%B0%94%ED%83%80-%ED%94%84%EB%A1%9C%ED%95%84-%EC%95%84%EC%9D%B4%EC%BD%98-%ED%9A%8C%EC%83%89-%EC%82%AC%EC%A7%84-%EC%9E%90%EB%A6%AC-%ED%91%9C%EC%8B%9C-%EC%9E%90-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%B2%A1%ED%84%B0.jpg?ver=6">
+                                            {% endif %}
+                                        </div>
+                                        <h5 class="detail_feed_name_txt">{{ cm.author }}</h5>
+                                        <h5 class="comment_txt">{{ cm.comment }}</h5>
+                                    </div>
+                                    <span class="detail_time_txt"> {{ cm.created_at | timesince }}</span>
+                                    {% if cm.author == user %}
+                                    <div style="float: right">
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                            <span class="material-symbols-outlined">delete</span>
+                                        </button>
+                                    
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                                            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="staticBackdropLabel">댓글 삭제</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        댓글을 정말 삭제하시겠습니까?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                            <button type="button" class="btn btn-light"><a href="/tweet/comment/delete/{{ cm.id }}">
+                                                                    <span class="material-symbols-outlined" style="color:black;">delete</span>
+                                                                </a></button>
+                                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                                                                <span class="material-symbols-outlined">close</span></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </p>
+            </div>
+            <div class="comment_box">
+                <div class="comment_profile">
+                    <div class="comment_img">
+                        <div class="detail_profile_box">
+                            {% if user.profile %}
+                            <img class="detail_profile_img" src="{{ user.profile.url }}">
+                            {% else %}
+                            <img class="detail_profile_img"
+                                src="https://us.123rf.com/450wm/thesomeday123/thesomeday1231712/thesomeday123171200009/91087331-%EB%82%A8%EC%84%B1%EC%9D%84%EC%9C%84%ED%95%9C-%EA%B8%B0%EB%B3%B8-%EC%95%84%EB%B0%94%ED%83%80-%ED%94%84%EB%A1%9C%ED%95%84-%EC%95%84%EC%9D%B4%EC%BD%98-%ED%9A%8C%EC%83%89-%EC%82%AC%EC%A7%84-%EC%9E%90%EB%A6%AC-%ED%91%9C%EC%8B%9C-%EC%9E%90-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%B2%A1%ED%84%B0.jpg?ver=6">
+                            {% endif %}
+                        </div>
+                    </div>
+                    <form class="input-group mb-3" action="/tweet/comment/{{ tweet.id }}" method="post">
+                        {% csrf_token %}
+                        <input type="text" class="form-control" id='comment' name='comment'
+                            placeholder="댓글을 남겨주세요" />
+                        <button class="btn btn-outline-secondary" type="submit">작성</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
