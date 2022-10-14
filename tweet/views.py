@@ -56,7 +56,7 @@ def post_add(request):
 def detail_tweet(request, id):
     my_tweet = TweetModel.objects.get(id=id)
     tweet_comment = TweetComment.objects.filter(tweet_id=id).order_by('-created_at')
-    return render(request, 'tweet/tweet_detail.html', {'tweet':'my_tweet', 'comment':'tweet_comment'})
+    return render(request, 'tweet/tweet_detail.html', {'tweet':my_tweet, 'comment':tweet_comment})
 
 
 @login_required
@@ -78,7 +78,7 @@ def write_comment(request, id):
 def delete_comment(request, id):
     comment = TweetComment.objects.get(id=id)
     current_tweet = comment.tweet.id
-    comment.delet()
+    comment.delete()
     return redirect('/tweet/'+str(current_tweet))
 
 
@@ -95,3 +95,10 @@ def mainpage_write_comment(request, id):
         TC.save()
         
         return redirect('/tweet/')
+    
+    
+@login_required
+def delete_tweet(request, id):
+    my_tweet = TweetModel.objects.get(id=id)
+    my_tweet.delete()
+    return redirect('/tweet/')

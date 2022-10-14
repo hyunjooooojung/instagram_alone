@@ -14,8 +14,9 @@ urlpatterns = [
     path('tweet/comment/delete/<int:id>', views.delete_comment, name='delete-comment'),
     path('tweet/home/comment/<int:id>', views.mainpage_write_comment, name='mainpage-write-comment'),
     
-    # 게시글 추가하기, 수정하기
+    # 게시글 추가하기, 수정하기, 삭제하기
     path('post-add/', views.post_add, name='post-add'),
+    path('tweet/delete/<int:id>', views.delete_tweet, name='delete-tweet'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
