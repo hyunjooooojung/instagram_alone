@@ -53,6 +53,26 @@ def post_add(request):
 
 
 @login_required
+def post_edit(request, id):
+    my_tweet = TweetModel.objects.get(id=id)
+    
+    if request.method == 'POST':
+        my_tweet.content = request.POST.get('my-content')
+        my_tweet.image = request.FILES.get('image', '')
+        
+        if my_tweet.content == '' or my_tweet.image == '' :
+            my_tweet = TweetModel.objects.all().order_by('-created_at')
+            return render(request, 'tweet/post-edit.html', {'error':'글과 이미지는 공백일 수 없습니다.'})
+            
+        my_tweet.save()
+        return redirect('/tweet/')
+    
+    else :
+        return render(request, 'tweet/post-edit.html', {'tweet':my_tweet})
+        
+
+
+@login_required
 def detail_tweet(request, id):
     my_tweet = TweetModel.objects.get(id=id)
     tweet_comment = TweetComment.objects.filter(tweet_id=id).order_by('-created_at')

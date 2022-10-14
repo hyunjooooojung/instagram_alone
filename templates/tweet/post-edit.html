@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}
+Post Edit
+{% endblock %}
+{% block postedit %}
+
+<div class="postadd_body" style="margin-top:-4%;">
+    <div class="modal_window">
+        <div class="modal_title">
+            <div class="modal_title_side"></div>
+            <div style="margin: 5px"> 게시물 수정하기 </div>
+            <a href="//">
+                <div class="modal_title_side">
+                    <span id="close_modal" class="close_modal material-icons-outlined" style="font-size: 30px; color: black;">
+                        close
+                    </span>
+                </div>
+            </a>
+        </div>
+        <form action="/post-edit/{{tweet.id}}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="modal_image_content">
+                <div class="modal_image_upload_content">
+                    <div class="image_content">
+                        <div class="cor">
+                            {% if tweet.image %}
+                            <img class="detail_feed_img " src="{{ tweet.image.url }}">
+                            {% else %}
+                            <img class="detail_feed_img " src="https://blog.kakaocdn.net/dn/cEftca/btqAgU7ckZC/2JaB2RLUkvskP7TqowbTLk/img.png">
+                            {% endif %}
+                            <input id="image" type="file" name="image" multiple style="padding-left:100px; margin-top:5%;" >
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal_content_write">
+                    <div class="feed_name">
+                        <div class="profile_box">
+                            {% if tweet.author.profile %}
+                            <img class="profileimage" src="{{ tweet.author.profile.url }}">
+                            {% else %}
+                            <img class="profileimage"
+                                src="https://us.123rf.com/450wm/thesomeday123/thesomeday1231712/thesomeday123171200009/91087331-%EB%82%A8%EC%84%B1%EC%9D%84%EC%9C%84%ED%95%9C-%EA%B8%B0%EB%B3%B8-%EC%95%84%EB%B0%94%ED%83%80-%ED%94%84%EB%A1%9C%ED%95%84-%EC%95%84%EC%9D%B4%EC%BD%98-%ED%9A%8C%EC%83%89-%EC%82%AC%EC%A7%84-%EC%9E%90%EB%A6%AC-%ED%91%9C%EC%8B%9C-%EC%9E%90-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%B2%A1%ED%84%B0.jpg?ver=6">
+                            {% endif %}
+                        </div>
+                        <span id="input_user_id" class="feed_name_txt"> {{ user.username }} </span>
+                    </div>
+                    <div >
+                        <textarea style="height: 330px" id="my-content" class="feed_content_textarea form-control col-sm-4" rows="10"
+                            name='my-content' placeholder="내용을 입력하세요..."></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-9" style=" margin-top:5%;">
+                            <input type="text" class="form-control" name="tag" id="tag" placeholder="#" style="margin-left:7%; width:270px;" >
+                        </div>
+                    </div>
+                    {% if error %}
+                    <p style="color:red; margin:3% auto 0px auto">
+                        {{ error }}
+                    </p>
+                    {% endif %}
+                    <div style="width: 100%; text-align: center;">
+                        <a class="nav-link" href="/home">
+                            <button id="button_write_feed" type="submit" class="btn btn-primary" style="width: 268px">
+                            게시글 수정하기</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+{% endblock postedit %}`
