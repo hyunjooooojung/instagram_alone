@@ -26,19 +26,21 @@ def tweet(request):
         if user: # 로그인 되어있는 사용자라면 
             all_tweet = TweetModel.objects.all().order_by('-created_at')
             all_comment = TweetComment.objects.all().order_by('-created_at')
-            return render(request, 'tweet/home.html', {'tweet': all_tweet, 'comment': all_comment})
+            all_image = TweetComment.objects.all().order_by('-created_at')
+            return render(request, 'tweet/home.html', {'tweet': all_tweet, 'comment': all_comment, 'image': all_image})
         else: # 로그인 되어있지 않다면
             return redirect('/sign-in')
         
     elif request.method == "POST":
         user = request.user
         content = request.POST.get('my-content')
+        image = request.FILES.get('image', '')
         
         if content == '':
             all_tweet = TweetModel.objects.all().order_by('-created_at')
             return render(request, 'tweet/post-add.html', {'error':'글은 공백일 수 없습니다', 'tweet':all_tweet})
         else:
-            my_tweet = TweetModel.objects.create(author=user, content=content)  # 글쓰기 모델 가져오기
+            my_tweet = TweetModel.objects.create(author=user, content=content, image=image)  # 글쓰기 모델 가져오기
             my_tweet.author = user  # 모델에 사용자 저장
             my_tweet.content = request.POST.get('my-content', '')  # 모델에 글 저장
             my_tweet.save()

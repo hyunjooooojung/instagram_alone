@@ -17,3 +17,5 @@ urlpatterns = [
     # 게시글 추가하기, 수정하기
     path('post-add/', views.post_add, name='post-add'),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

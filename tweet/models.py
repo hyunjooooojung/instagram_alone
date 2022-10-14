@@ -1,5 +1,7 @@
+from distutils.command.upload import upload
 from django.db import models
 from user.models import UserModel
+from taggit.managers import TaggableManager
 
 
 # Create your models here.
@@ -11,6 +13,8 @@ class TweetModel(models.Model):
     content = models.CharField(max_length=256)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    image = models.ImageField(upload_to = "images/")
+    tags = TaggableManager(blank=True)
 
 
 class TweetComment(models.Model):
