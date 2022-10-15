@@ -64,4 +64,55 @@ def logout(request):
     return redirect("/")
             
             
+@login_required
+def user_view(request):
+    if request.method == "GET":
+        # 사용자를 불러오기, exclude와 request.user.username 를 사용해서 '로그인 한 사용자'를 제외하기
+        user_list = UserModel.objects.all().exclude(username=request.user.username)
+        return render(request, 'user/user_list.html', {'user_list': user_list})
+    
+    
+@login_required
+def user_follow(request, id):
+    me = request.user
+    click_user = UserModel.objects.get(id=id)
+    if me in click_user.followee.all():
+        click_user.followee.remove(request.user)
+    else:
+        click_user.followee.add(request.user)
+    return redirect('/user')
+
+
+@login_required
+def profile(request):
+    return render(request, 'user/profile.html')
+
+
+@login_required
+def change_profile(request):
+    if request.method == 'POST':
+        user_image = request.user
+        user_image.profile = request.FILES.get('profile','')
+        user_image.save()
+
+        return render(request, 'user/profile.html')
+            
+    elif request.method == 'GET':
+        user_image = UserModel()
+        return render(request, 'user/change_profile.html',{'profile':user_image})
+
+
+@login_required
+def profile_change(request):
+    if request.method == 'GET':
+        user = request.user.is_authenticated
+        if user:
+            return redirect('/')
+        else:
+            return render(request, 'user/profile.html')
+    elif request.method == 'POST':
+        username = request.POST.get('username','')
+        first_name = request.POST.get('first_name','')
+        bio = request.bio.POST.get('post','')
+        
         

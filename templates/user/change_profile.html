@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %}
+Profile image
+{% endblock %}
+{% block postadd %}
+
+<style>
+    .change_body {
+        height: 600px;
+        display: flex;
+    }
+
+    .change_window {
+        background: white;
+        backdrop-filter: blur(13.5px);
+        -webkit-backdrop-filter: blur(13.5px);
+        border-radius: 10px;
+        border: 1px solid rgba(87, 87, 87, 0.18);
+        width: 500px;
+        height: 500px;
+        position: relative;
+        margin: auto;
+
+    }
+
+    .change_title {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        font-weight: bold;
+        font-size: 20px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.18);
+    }
+
+    .change_title_side {
+        margin: 5px;
+        flex: 0 0 40px;
+        text-align: center;
+    }
+
+    .change_image_upload {
+        outline: 2px dashed black;
+        outline-offset: -10px;
+        transition: all .15s ease-in-out;
+        width: 500px;
+        height: 450px;
+        
+    }
+
+    .change_image_upload_content {
+        transition: all .15s ease-in-out;
+        
+    }
+
+</style>
+
+
+<div class="change_body">
+    <div class="change_window">
+        <div class="change_title">
+            <div class="change_title_side"></div>
+            <div style="margin: 5px"> 프로필 변경 </div>
+            <a href="/profile">
+                <div class="change_title_side">
+                    <span id="close_modal" class="close_modal material-icons-outlined" style="font-size: 30px">
+                        close
+                    </span>
+                </div>
+            </a>
+        </div>
+        <form action="/change_profile/" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="change_image_upload">
+                <div class="change_image_upload_content">
+                    <input id="profile" type="file" name="profile" style="margin:200px 0px 200px 150px;" multiple>      
+                </div>
+            </div>
+                <div style="width: 100%; text-align: center;">
+                <button id="button_write_feed" type="submit" class="btn btn-primary" style="width: 100px; margin-top:10px;" >
+                    변경하기</button>
+                </div> 
+        </form>
+    </div>
+</div>
+
+
+{% endblock postadd %}
