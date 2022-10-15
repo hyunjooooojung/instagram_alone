@@ -18,6 +18,10 @@ urlpatterns = [
     path('post-add/', views.post_add, name='post-add'),
     path('post-edit/<int:id>', views.post_edit, name='post-edit'),
     path('tweet/delete/<int:id>', views.delete_tweet, name='delete-tweet'),
+    
+    # 태그
+    path('tag/', views.TagCloudTV.as_view(), name='tag_cloud'),
+    path('tag/<str:tag>', views.TaggedObjectLV.as_view(), name='tagged_object_list'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
