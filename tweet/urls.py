@@ -22,6 +22,9 @@ urlpatterns = [
     # 태그
     path('tag/', views.TagCloudTV.as_view(), name='tag_cloud'),
     path('tag/<str:tag>', views.TaggedObjectLV.as_view(), name='tagged_object_list'),
+    
+    # 좋아요
+    path('likes/<int:id>/', views.likes, name='likes'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

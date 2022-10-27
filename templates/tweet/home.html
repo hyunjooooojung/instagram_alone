@@ -45,25 +45,24 @@ Home
 
             <div class="feed_icon">
                 <div>
-                    <span class="material-icons-outlined">
+                    <!-- <span class="material-icons-outlined">
                         favorite_border
-                    </span>
-                    <span class="material-icons-outlined">
+                    </span> -->
+                    <form action="/likes/{{ tw.id }}/" method="POST">
+                        {% csrf_token %}
+                        <button>
+                          <i class="far fa-heart"></i>
+                        </button>
+                    </form>
+                    <!-- <span class="material-icons-outlined">
                         mode_comment
                     </span>
                     <span class="material-icons-outlined">
                         send
-                    </span>
-                </div>
-                <div>
-                    <span class="material-icons-outlined">
-                        turned_in_not
-                    </span>
+                    </span> -->
                 </div>
             </div>
-            <div class="feed_like">
-                <p class="feed_txt"> <b>좋아요 10개</b></p>
-            </div>
+            
             <div class="feed_content">
                 <p class="feed_txt" > <b> {{ tw.author }} </b> {{ tw.content }}
                 <div style="text-align: left">
@@ -79,6 +78,7 @@ Home
                 <a style="text-decoration: none" href="{% url 'tag_cloud' %}"></a>
                 {% endif %}
             </div>
+
             <div class="feed_reply">
                 <div class="feed_reply">
                     {% for cm in tw.tweetcomment_set.all %}

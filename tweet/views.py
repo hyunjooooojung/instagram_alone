@@ -6,6 +6,7 @@ from .models import TweetModel
 from .models  import TweetComment
 from user.models import UserModel
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from django.views.generic import ListView, TemplateView
 import random
 from django.views.generic import ListView, TemplateView
@@ -147,3 +148,16 @@ class TaggedObjectLV(ListView):
         context = super().get_context_data(**kwargs)
         context['tagname'] = self.kwargs['tag']
         return context
+    
+    
+@require_POST
+def likes(request, id):
+    if request.user.is_authenticated:
+        my_tweet = TweetModel.objects.get(id=id)
+
+        if my_tweet.like_users.filter(id=request.user.id).exists():
+            my_tweet.like_users.remove(request.user)
+        else:
+            my_tweet.like_users.add(request.user)
+        return redirect('/tweet')
+    return redirect('sign-in/')
